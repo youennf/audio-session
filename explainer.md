@@ -1,6 +1,6 @@
 # Audio Focus API Explainer
 
-*Last modified: Feb 13th 2019*
+*Youenn version only*
 
 ## Objectives
 People consume a lot of media (audio/video) and the Web is one of the primary means of consuming this type of content. However, media on the web does not integrate well with the platform. The Audio Focus API helps to close the gap with platforms that have audio focus such as Android and iOS. This API will help by improving the audio-mixing of websites with native apps, so they can play on top of each other, or play exclusively.
@@ -26,40 +26,41 @@ Firstly, audio focus means an audio-producing object is allowed to play sound. B
  * Transient (`transient`) audio, such as a notification ping. They usually should play on top of playback audio (and maybe also "duck" persistent audio).
  * Transient solo (`transient-solo`) audio, such as driving directions. They should pause/mute all other audio and play exclusively. When a transient-solo audio ended, it should resume the paused/muted audio.
  * Ambient (`ambient`) audio, which is mixable with other types of audio. This is useful in some special cases such as when the user wants to mix audios from multiple pages.
+ * Record (`record`) audio, which is used for recording audio. This is useful in cases microphone is being used or in video conferencing applications.
 
-The AudioFocusSession is the main interface for this API. It can have the following states:
+The AudioSession is the main interface for this API. It can have the following states:
 
- * active: the AudioFocusSession is allowed to play sound.
- * suspended: the AudioFocusSession is not allowed to play sound, but can resume when it regains focus.
- * inactive: the AudioFocusSession is not allowed to play sound, and will not regain focus unless it requests audio focus again.
+ * active: the AudioSession is allowed to play sound.
+ * suspended: the AudioSession is not allowed to play sound, but can resume when it regains focus.
+ * inactive: the AudioSession is not allowed to play sound, and will not regain focus unless it requests audio focus again.
 
-The page can have a default AudioFocusSession which is used by the user agent to automatically request and abandon audio focus when media elements start/finish playing on the page. This session is created automatically by the user agent when the page is loaded.
+The page can have a default AudioSession which is used by the user agent to automatically request and abandon audio focus when media elements start/finish playing on the page. This session is created automatically by the user agent when the page is loaded.
 
 ```javascript
-enum AudioFocusState {
+enum AudioSessionState {
   "inactive",
   "active",
   "suspended"
 };
 
-enum AudioFocusType {
+enum AudioSessionType {
   "playback",
   "transient",
   "transient-solo",
-  "ambient"
+  "ambient",
+  "play-and-record"
 };
 
 [Exposed=Window]
-interface AudioFocus {
+partial interface Navigator {
   // The default audio focus session that the user agent will use
   // when media elements start/stop playing. This will be created
-  // by the user agent when the page is loaded. If set to null then
-  // this feature will be disabled.
-  attribute AudioFocusSession? defaultSession;
+  // by the user agent when the page is loaded.
+  attribute AudioSession? audioSession;
 };
 
-[Exposed=Window, Constructor(AudioFocusType type)]
-interface AudioFocusSession : EventTarget {
+[Exposed=Window, Constructor(AudioSessionType type)]
+interface AudioSession : EventTarget {
   // Request audio focus from the platform and the boolean will be
   // true if the request was successful.
   Promise<bool> request();
@@ -68,24 +69,39 @@ interface AudioFocusSession : EventTarget {
   // not have audio focus.
   Promise<void> abandon();
 
-  readonly attribute AudioFocusState state;
+  readonly attribute AudioSessionState state;
   attribute EventHandler onchange;
 };
 ```
 
-There should only be one audio focus session active on a page at one time. If there are multiple sessions on a page then when one requests audio focus it will make all the other sessions inactive.
+There should only be one audio session active on a page at one time. If there are multiple sessions on a page then when one requests audio focus it will make all the other sessions inactive.
 
 ### Sample Code
 
+#### A site sets its audio session type proactively to "play-and-record"
+
+```javascript
+const session = new AudioSession(‘play-and-record’);
+// From now on, volume might be set based on ‘play-and-record’.
+...
+// Start playing remote media
+remoteVideo.srcObject = remoteMediaStream;
+remoteVideo.play();
+// Start capturing
+navigator.mediaDevices.getUserMedia({ audio:true, video:true }).then(stream => {
+    localVideo.srcObject = stream;
+});
+```
+
 #### A site manages its own audio focus
 
-In this situation a site (e.g. a game) wants to manage its own audio focus. In this case it can use the following code to create an AudioFocusSession and request/abandon audio focus:
+In this situation a site (e.g. a game) wants to manage its own audio focus. In this case it can use the following code to create an AudioSession and request/abandon audio focus:
 
 ```javascript
 // Prevent the user agent from managing focus
-audioFocus.defaultSession = null;
+navigator.audioSession = null;
 
-const session = AudioFocusSession(‘transient’);
+const session = new AudioSession(‘transient’);
 
 session.request().then(
  (success) => {  /* handle request result */ },
@@ -103,13 +119,13 @@ session.addEventListener(‘onchange’, (e) => // state change);
 In this situation a site would like to use the default audio focus logic provided by the user agent. However, they would like to customise the type of audio focus to request. Therefore, they create a custom audio focus session and assign it to the defaultSession variable. 
 
 ```javascript
-audioFocus.defaultSession = AudioFocusSession(‘transient’);
+navigator.audioSession = new AudioSession(‘transient’);
 
 // 1. Site starts playing some transient media
 // 2. User now clicks a video
 
-audioFocus.defaultSession = AudioFocusSession(‘ambient’);
-audioFocus.defaultSession.addEventListener(
+navigator.audioSession = AudioFocusSession(‘ambient’);
+navigator.audioSession.addEventListener(
     ‘onchange’, (e) => // state change);
 
 // Site plays the video and the user agent will automatically
@@ -117,7 +133,7 @@ audioFocus.defaultSession.addEventListener(
 A site would like to observe audio focus state
 If a site would like to simply observe the audio focus state. They can create an event listener on the default session of the page.
 
-audioFocus.defaultSession.addEventListener(
+navigator.audioSession.addEventListener(
     ‘onchange’, (e) => // state change);
 ```
 
@@ -130,7 +146,7 @@ If a site would like to play a combination of media types (e.g. a video and a no
 // A user is playing a video on a site and receives a notification 
 // ping.
 
-audioFocus.defaultSession = AudioFocusSession(‘transient’);
+navigator.audioSession = new AudioFocusSession(‘transient’);
 
 // All other sessions are ducked. We should also duck the video
 // element on the page by manually adjusting the volume.
@@ -140,21 +156,21 @@ video.volume = 0.8;
 // When the ping is done playing we can change the focus back to
 // playback and the playing video will join that session.
 
-audioFocus.defaultSession = AudioFocusSession(‘playback’);
+navigator.audioSession = new AudioFocusSession(‘playback’);
 ```
 
 This is an alternative implementation without using the default session:
 
 ```javascript
-audioFocus.defaultSession = null;
+navigator.audioSession = null;
 
 // A user starts playing a video on a site.
-const session = AudioFocusSession(‘playback’);
+const session = new AudioFocusSession(‘playback’);
 session.request();
 
 // The user receives a notification ping. In this case calling
 // request on |transientSession| will make |session| inactive.
-const transientSession = AudioFocusSession(‘transient’);
+const transientSession = new AudioFocusSession(‘transient’);
 
 transientSession.addEventListener(
     ‘onchange’, (e) => {
