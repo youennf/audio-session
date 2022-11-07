@@ -76,7 +76,17 @@ interface AudioSession : EventTarget {
 
 There should only be one audio session active on a page at one time. If there are multiple sessions on a page then when one requests audio focus it will make all the other sessions inactive.
 
-### Sample Code
+## Open Questions
+
+- Should we do a two-stage approach (expose state and type as a first step, then define request/abandon as a second step)?
+- Should we allow web applications to know what the user agent session type is, when it changes and so on?
+   For instance, if we play media, the user agent session type will be `playback` and might switch to `play-and-record` once we call getUserMedia.
+- If the audio session is explictly set to `playback` by the web application, should `getUserMedia({ audio:true })` actually fail?
+- Should we provide defaulting rules based on same origin iframes (top level frame audio session is set, and will be used for media elements created by iframes as well, if iframe AudioSession is not set).
+- Should we allow linking AudioSessions to each HTMLMediaElement/AudioContext object?
+- Should AudioSession be the one used to specifiy the output speaker and/or the route (a la `sinkId`)?
+
+## Sample Code
 
 #### A site sets its audio session type proactively to "play-and-record"
 
