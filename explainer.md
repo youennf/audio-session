@@ -59,8 +59,15 @@ partial interface Navigator {
   attribute AudioSession? audioSession;
 };
 
+// First API step
 [Exposed=Window, Constructor(AudioSessionType type)]
 interface AudioSession : EventTarget {
+  readonly attribute AudioSessionState state;
+  attribute EventHandler onchange;
+};
+
+// Second API step
+partial interface AudioSession {
   // Request audio focus from the platform and the boolean will be
   // true if the request was successful.
   Promise<bool> request();
@@ -68,9 +75,6 @@ interface AudioSession : EventTarget {
   // Abandons audio focus. Throws an error if the session does
   // not have audio focus.
   Promise<void> abandon();
-
-  readonly attribute AudioSessionState state;
-  attribute EventHandler onchange;
 };
 ```
 
