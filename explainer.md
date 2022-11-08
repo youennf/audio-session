@@ -55,7 +55,7 @@ enum AudioSessionType {
 partial interface Navigator {
   // The default audio focus session that the user agent will use
   // when media elements start/stop playing. This will be created
-  // by the user agent when the page is loaded.
+  // by the user agent as needed when audio APIs are used.
   attribute AudioSession? audioSession;
   attribute EventHandler onaudiosessionchange;  
 };
