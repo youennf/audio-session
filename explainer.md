@@ -57,6 +57,7 @@ partial interface Navigator {
   // when media elements start/stop playing. This will be created
   // by the user agent when the page is loaded.
   attribute AudioSession? audioSession;
+  attribute EventHandler onaudiosessionchange;  
 };
 
 // First API step
