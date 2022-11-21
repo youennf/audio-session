@@ -65,7 +65,7 @@ partial interface Navigator {
 [Exposed=Window, Constructor(AudioSessionType type)]
 interface AudioSession : EventTarget {
   readonly attribute AudioSessionState state;
-  attribute EventHandler onchange;
+  attribute EventHandler onstatechange;
 };
 
 // Second API step
