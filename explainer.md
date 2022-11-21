@@ -139,7 +139,7 @@ navigator.audioSession = new AudioSession(‘transient’);
 // 1. Site starts playing some transient media
 // 2. User now clicks a video
 
-navigator.audioSession = AudioFocusSession(‘ambient’);
+navigator.audioSession = AudioSession(‘ambient’);
 navigator.audioSession.addEventListener(
     ‘onchange’, (e) => // state change);
 
@@ -161,7 +161,7 @@ If a site would like to play a combination of media types (e.g. a video and a no
 // A user is playing a video on a site and receives a notification 
 // ping.
 
-navigator.audioSession = new AudioFocusSession(‘transient’);
+navigator.audioSession = new AudioSession(‘transient’);
 
 // All other sessions are ducked. We should also duck the video
 // element on the page by manually adjusting the volume.
@@ -171,7 +171,7 @@ video.volume = 0.8;
 // When the ping is done playing we can change the focus back to
 // playback and the playing video will join that session.
 
-navigator.audioSession = new AudioFocusSession(‘playback’);
+navigator.audioSession = new AudioSession(‘playback’);
 ```
 
 This is an alternative implementation without using the default session:
@@ -180,12 +180,12 @@ This is an alternative implementation without using the default session:
 navigator.audioSession = null;
 
 // A user starts playing a video on a site.
-const session = new AudioFocusSession(‘playback’);
+const session = new AudioSession(‘playback’);
 session.request();
 
 // The user receives a notification ping. In this case calling
 // request on |transientSession| will make |session| inactive.
-const transientSession = new AudioFocusSession(‘transient’);
+const transientSession = new AudioSession(‘transient’);
 
 transientSession.addEventListener(
     ‘onchange’, (e) => {
