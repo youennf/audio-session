@@ -27,7 +27,7 @@ Firstly, audio focus means an audio-producing object is allowed to play sound. B
  * Transient solo (`transient-solo`) audio, such as driving directions. They should pause/mute all other audio and play exclusively. When a transient-solo audio ended, it should resume the paused/muted audio.
  * Ambient (`ambient`) audio, which is mixable with other types of audio. This is useful in some special cases such as when the user wants to mix audios from multiple pages.
  * Play and record (`play-and-record`) audio, which is used for recording audio. This is useful in cases microphone is being used or in video conferencing applications.
- * Default (`default`) lets the User Agent choose the best audio session type according the use of audio by the web page. This is the type of the default AudioSession.
+ * Auto (`auto`) lets the User Agent choose the best audio session type according the use of audio by the web page. This is the type of the default AudioSession.
 
 The AudioSession is the main interface for this API. It can have the following states:
 
@@ -50,7 +50,7 @@ enum AudioSessionType {
   "transient-solo",
   "ambient",
   "play-and-record",
-  "default"
+  "auto"
 };
 
 [Exposed=Window]
