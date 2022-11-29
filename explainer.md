@@ -56,26 +56,25 @@ enum AudioSessionType {
 [Exposed=Window]
 partial interface Navigator {
   // The default audio session that the user agent will use
-  // when media elements start/stop playing. This will be created
-  // by the user agent as needed when audio APIs are used.
-  attribute AudioSession audioSession;
+  // when media elements start/stop playing.
+  readonly attribute AudioSession audioSession;
 };
 
 // First API step
-[Exposed=Window, Constructor(AudioSessionType type)]
+[Exposed=Window]
 interface AudioSession : EventTarget {
   readonly attribute AudioSessionState state;
   attribute EventHandler onstatechange;
+  attribute AudioSessionType type;
 };
 
-// Second API step
+// Second API step: we might want to be able to create AudioSession and request/abandon focus
 partial interface AudioSession {
-  // Request audio focus from the platform and the boolean will be
-  // true if the request was successful.
+  constructor();
+  // Request audio focus from the platform. Resolves with true if the request was successful.
   Promise<bool> request();
 
-  // Abandons audio focus. Throws an error if the session does
-  // not have audio focus.
+  // Abandons audio focus. Rejects with an error if the session does not have audio focus.
   Promise<void> abandon();
 };
 ```
