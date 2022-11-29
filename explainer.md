@@ -131,12 +131,19 @@ navigator.audioSession.onstatechange = () => {
         remoteVideo.pause();
         // Make it clear to the user that the call is interrupted.
         showInterruptedBanner();
+        localVideo.srcObject.getTracks().forEach(track => track.enabled = false);
         return;
     }
     if (isInterrupted) {
         isInterrupted = false;
         // Let user decide when to restart the call.
-        showRestartBanner();
+        showRestartBanner().then((result) => {
+            if (!result)
+                return;
+            localVideo.srcObject.getTracks().forEach(track => track.enabled = true);
+            localVideo.play();
+            remoteVideo.play();
+        });
     }
 }
 ```
