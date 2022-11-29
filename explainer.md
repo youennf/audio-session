@@ -63,9 +63,10 @@ partial interface Navigator {
 // First API step
 [Exposed=Window]
 interface AudioSession : EventTarget {
+  attribute AudioSessionType type;
+
   readonly attribute AudioSessionState state;
   attribute EventHandler onstatechange;
-  attribute AudioSessionType type;
 };
 
 // Second API step: we might want to be able to create AudioSession and request/abandon focus
@@ -96,8 +97,8 @@ There should only be one audio session active on a page at one time. If there ar
 #### A site sets its audio session type proactively to "play-and-record"
 
 ```javascript
-const session = new AudioSession(‘play-and-record’);
-// From now on, volume might be set based on ‘play-and-record’.
+navigator.audioSession.type = 'play-and-record';
+// From now on, volume might be set based on 'play-and-record'.
 ...
 // Start playing remote media
 remoteVideo.srcObject = remoteMediaStream;
@@ -107,6 +108,40 @@ navigator.mediaDevices.getUserMedia({ audio:true, video:true }).then(stream => {
     localVideo.srcObject = stream;
 });
 ```
+
+#### A site reacts upon interruption.
+
+```javascript
+navigator.audioSession.type = 'play-and-record';
+// From now on, volume might be set based on 'play-and-record'.
+...
+// Start playing remote media
+remoteVideo.srcObject = remoteMediaStream;
+remoteVideo.play();
+// Start capturing
+navigator.mediaDevices.getUserMedia({ audio:true, video:true }).then(stream => {
+    localVideo.srcObject = stream;
+});
+
+let isInterrupted = false;
+navigator.audioSession.onstatechange = () => {
+    if (navigator.audioSession.state === 'interrupted') {
+        isInterrupted = true;
+        localVideo.pause();
+        remoteVideo.pause();
+        // Make it clear to the user that the call is interrupted.
+        showInterruptedBanner();
+        return;
+    }
+    if (isInterrupted) {
+        isInterrupted = false;
+        // Let user decide when to restart the call.
+        showRestartBanner();
+    }
+}
+```
+
+## Sample Code (Old)
 
 #### A site manages its own audio focus
 
