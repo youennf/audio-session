@@ -69,14 +69,14 @@ interface AudioSession : EventTarget {
 };
 
 // Second API step: we might want to be able to create AudioSession and request/abandon focus
-partial interface AudioSession {
-  constructor();
+//partial interface AudioSession {
+//  constructor();
   // Request audio focus from the platform. Resolves with true if the request was successful.
-  Promise<bool> request();
+//  Promise<bool> request();
 
   // Abandons audio focus. Rejects with an error if the session does not have audio focus.
-  Promise<void> abandon();
-};
+//  Promise<void> abandon();
+//};
 ```
 
 There should only be one audio session active on a page at one time. If there are multiple sessions on a page then when one requests audio focus it will make all the other sessions inactive.
