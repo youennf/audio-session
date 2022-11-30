@@ -58,7 +58,6 @@ partial interface Navigator {
   readonly attribute AudioSession audioSession;
 };
 
-// First API step
 [Exposed=Window]
 interface AudioSession : EventTarget {
   attribute AudioSessionType type;
@@ -66,16 +65,6 @@ interface AudioSession : EventTarget {
   readonly attribute AudioSessionState state;
   attribute EventHandler onstatechange;
 };
-
-// Second API step: we might want to be able to create AudioSession and request/abandon focus
-//partial interface AudioSession {
-//  constructor();
-  // Request audio focus from the platform. Resolves with true if the request was successful.
-//  Promise<bool> request();
-
-  // Abandons audio focus. Rejects with an error if the session does not have audio focus.
-//  Promise<void> abandon();
-//};
 ```
 
 There should only be one audio session active on a page at one time. If there are multiple sessions on a page then when one requests audio focus it will make all the other sessions inactive.
@@ -86,7 +75,7 @@ The default audio session exposed as `navigator.audioSession` counts as one audi
   Should we allow linking AudioSessions to each HTMLMediaElement/AudioContext object as a way to group audio producers?
 - Should we do a two-stage approach (expose state and type as a first step, then define request/abandon as a second step)?
   This would mean introducing new APIs like:
-```
+```javascript
 partial interface AudioSession {
   constructor();
   // Request audio focus from the platform. Resolves with true if the request was successful.
