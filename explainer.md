@@ -108,7 +108,7 @@ navigator.mediaDevices.getUserMedia({ audio:true, video:true }).then(stream => {
 });
 ```
 
-#### A site reacts upon suspension.
+#### A site reacts upon suspension
 
 ```javascript
 navigator.audioSession.type = 'play-and-record';
