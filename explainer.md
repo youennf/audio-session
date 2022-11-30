@@ -1,16 +1,27 @@
 # Audio Session API Explainer
 
 ## Objectives
-People consume a lot of media (audio/video) and the Web is one of the primary means of consuming this type of content. However, media on the web does not integrate well with the platform. The Audio Session API helps to close the gap with platforms that have audio session and audio focus such as Android and iOS. This API will help by improving the audio-mixing of websites with native apps, so they can play on top of each other, or play exclusively.
+People consume a lot of media (audio/video) and the Web is one of the primary means of consuming this type of content.
+However, media on the web does not integrate well with the platform.
+The Audio Session API helps to close the gap with platforms that have audio session and audio focus such as Android and iOS.
+This API will help by improving the audio-mixing of websites with native apps, so they can play on top of each other, or play exclusively.
 
-Additionally, on some platforms the user agent will automatically manage audio focus for the site based on whether media elements are playing or not. In some cases this may not match user expectations so this API will provide overrides for the authors.
+Additionally, on some platforms the user agent will automatically manage the audio session for the site based on whether media elements are playing or not and which APIs are used for playing audio.
+In some cases this may not match user expectations so this API will provide overrides for the authors.
 
 ### Goals
 
- * **A site should be able to manage its own audio session and focus focus.** If a site wishes to manage its own audio focus then the user agent should not automatically manage it. This would be used on a site where the default user agent audio focus logic is not appropriate (a media site where we switch tracks) or supported (e.g. WebAudio, WebRTC sites).
- * **A site should be able to define how audio streams will interact with the platform.** This is where it can be annoying where two tabs play audio at the same time. However, in some cases it may be appropriate to play the two audio streams on top of each other (e.g. a transient ping).
- * **A site should be able to determine its own audio session state.** A site should be notified if its audio session state changes. This is so sites that are manually managing focus can be aware of their current state.
- * **To provide an experience on par with native apps.** Native apps have audio session APIs on some platforms so we should provide a similar level of experience for websites.
+ * **A site should be able to manage its own audio session and focus focus.**
+   If a site wishes to manage its own audio focus then the user agent should not automatically manage it.
+   This would be used on a site where the default user agent audio focus logic is not appropriate (a media site where we switch tracks) or supported (e.g. WebAudio, WebRTC sites).
+ * **A site should be able to define how audio streams will interact with the platform.**
+   This is where it can be annoying where two tabs play audio at the same time.
+   However, in some cases it may be appropriate to play the two audio streams on top of each other (e.g. a transient ping).
+ * **A site should be able to determine its own audio session state.**
+   A site should be notified if its audio session state changes.
+   This is so sites that are manually managing focus can be aware of their current state.
+ * **To provide an experience on par with native apps.**
+   Native apps have audio session APIs on some platforms so we should provide a similar level of experience for websites.
 
 ### Non-goals
 
@@ -33,7 +44,8 @@ The AudioSession is the main interface for this API. It can have the following s
  * suspended: the AudioSession is not playing sound, but can resume when it regains focus.
  * inactive: the AudioSession is not playing sound.
 
-The page has a default AudioSession which is used by the user agent to automatically set up the audio session parameters and request and abandon audio focus when media elements start/finish playing on the page. This session is created automatically by the user agent when the page is loaded.
+The page has a default audio session which is used by the user agent to automatically set up the audio session parameters and request and abandon audio focus when media elements start/finish playing on the page.
+This default audio session is represented as an `AudioSession` object and is exposed as `navigator.audioSession`.
 
 ```javascript
 enum AudioSessionState {
@@ -66,9 +78,6 @@ interface AudioSession : EventTarget {
   attribute EventHandler onstatechange;
 };
 ```
-
-There should only be one audio session active on a page at one time. If there are multiple sessions on a page then when one requests audio focus it will make all the other sessions inactive.
-The default audio session exposed as `navigator.audioSession` counts as one audio session (the default audio session) even though it is represented as one AudioSession object per browsing context.
 
 ## Open Questions
 - Do we need anything else but the default AudioSession object exposed in navigator?
