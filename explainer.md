@@ -73,15 +73,18 @@ The default audio session exposed as `navigator.audioSession` counts as one audi
 ## Open Questions
 - Do we need anything else but the default AudioSession object exposed in navigator?
   Should we allow linking AudioSessions to each HTMLMediaElement/AudioContext object as a way to group audio producers?
+  Proposal is to wait for more use cases.
 - Should we allow third-party iframes access to AudioSession?
-   We might use permissions policy to allow third-party iframe to mutate AudioSessions.
+   Proposal is to use permissions policy to allow third-party iframe to mutate AudioSessions.
 - Should we allow web applications to know what the user agent session type is, when it changes and so on? 
    For instance, the user agent session type might switch from `playback` to `play-and-record` once getUserMedia is called.
-   Current proposal is to not represent this changing internal state and use `auto`.
+   Proposal is to not represent this changing internal state and use `auto`.
 - If the audio session is explicitly set to `playback` by the web application, should `getUserMedia({ audio:true })` actually fail?
+   Proposal is to actually fail this.
 - Should AudioSession be the one used to specifiy the output speaker and/or the route (a la `sinkId`)?
+   Proposal is to wait for more use cases.
 - Should we do a two-stage approach (expose state and type as a first step, then define request/abandon as a second step)?
-  This would mean introducing new APIs like:
+   Proposal is to wait for more use cases. This would mean introducing new APIs like:
 ```javascript
 partial interface AudioSession {
   constructor();
