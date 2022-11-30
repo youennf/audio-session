@@ -29,9 +29,9 @@ Firstly, audio focus means an audio-producing object is allowed to play sound. B
 
 The AudioSession is the main interface for this API. It can have the following states:
 
- * active: the AudioSession is allowed to play sound.
- * suspended: the AudioSession is not allowed to play sound, but can resume when it regains focus.
- * inactive: the AudioSession is not playing sound or not allowed to play sound, and will not regain focus unless it requests audio focus again.
+ * active: the AudioSession is playing sound.
+ * suspended: the AudioSession is not playing sound, but can resume when it regains focus.
+ * inactive: the AudioSession is not playing sound.
 
 The page has a default AudioSession which is used by the user agent to automatically set up the audio session parameters and request and abandon audio focus when media elements start/finish playing on the page. This session is created automatically by the user agent when the page is loaded.
 
