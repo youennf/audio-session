@@ -89,7 +89,7 @@ interface AudioSession : EventTarget {
    For instance, the user agent session type might switch from `playback` to `play-and-record` once getUserMedia is called.
    Proposal is to not represent this changing internal state and use `auto`.
 - If the audio session is explicitly set to `playback` by the web application, should `getUserMedia({ audio:true })` actually fail?
-   Proposal is to actually fail this.
+   Proposal is to actually fail this to improve interoperability, provided the combination of APIs/AudioSession types is tractable.
 - Should AudioSession be the one used to specifiy the output speaker and/or the route (a la `sinkId`)?
    Proposal is to wait for more use cases.
 - Should we do a two-stage approach (expose state and type as a first step, then define request/abandon as a second step)?
