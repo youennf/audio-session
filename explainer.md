@@ -87,7 +87,6 @@ The default audio session exposed as `navigator.audioSession` counts as one audi
    Proposal is to wait for more use cases. This would mean introducing new APIs like:
 ```javascript
 partial interface AudioSession {
-  constructor();
   // Request audio focus from the platform. Resolves with true if the request was successful.
   Promise<bool> request();
 
