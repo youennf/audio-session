@@ -25,7 +25,7 @@ In some cases this may not match user expectations so this API will provide over
 
 ### Non-goals
 
-* We should aim to improve the audio interaction between the site and the platform. Audio interaction within the site should be up to the site.
+* We should aim to improve the audio interaction between the site and the platform. Audio interaction within the site should be up to the site in the first version of this document.  For instance, a web site cannot manipulate more than one audio session and cannot group audio producers in different audio sesssions.
 
 ## API Design
 
@@ -78,31 +78,6 @@ interface AudioSession : EventTarget {
   attribute EventHandler onstatechange;
 };
 ```
-
-## Open Questions
-- Do we need anything else but the default AudioSession object exposed in navigator?
-  Should we allow linking AudioSessions to each HTMLMediaElement/AudioContext object as a way to group audio producers?
-  Proposal is to wait for more use cases.
-- Should we allow third-party iframes access to AudioSession?
-   Proposal is to use permissions policy to allow third-party iframe to mutate AudioSessions.
-- Should we allow web applications to know what the user agent session type is, when it changes and so on? 
-   For instance, the user agent session type might switch from `playback` to `play-and-record` once getUserMedia is called.
-   Proposal is to not represent this changing internal state and use `auto`.
-- If the audio session is explicitly set to `playback` by the web application, should `getUserMedia({ audio:true })` actually fail?
-   Proposal is to actually fail this to improve interoperability, provided the combination of APIs/AudioSession types is tractable.
-- Should AudioSession be the one used to specifiy the output speaker and/or the route (a la `sinkId`)?
-   Proposal is to wait for more use cases.
-- Should we do a two-stage approach (expose state and type as a first step, then define request/abandon as a second step)?
-   Proposal is to wait for more use cases. This would mean introducing new APIs like:
-```javascript
-partial interface AudioSession {
-  // Request audio focus from the platform. Resolves with true if the request was successful.
-  Promise<bool> request();
-
-  // Abandons audio focus. Rejects with an error if the session does not have audio focus.
-  Promise<void> abandon();
-};
-```  
 
 ## Sample Code
 
