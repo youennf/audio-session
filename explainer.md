@@ -15,7 +15,7 @@ In some cases this may not match user expectations so this API will provide over
    This is where it can be annoying where two tabs play audio at the same time.
    However, in some cases it may be appropriate to play the two audio streams on top of each other (e.g. a transient ping).
  * **A site should be able to manage its own audio session and focus.**
-   If a site wishes to manage its own audio focus (when to restart playing once unsuspended for instance) then the user agent should not automatically manage it.
+   If a site wishes to manage its own audio focus (when to restart playing once uninterrupted for instance) then the user agent should not automatically manage it.
    This would be used on a site where the default user agent audio focus logic is not appropriate (a media site where we switch tracks) or supported (e.g. WebAudio, WebRTC sites).
  * **A site should be able to determine its own audio session state.**
    A site should be notified if its audio session state changes.
@@ -41,7 +41,7 @@ By convention, there are several `audio session types` for different purposes:
 The AudioSession is the main interface for this API. It can have the following states:
 
  * active: the AudioSession is playing sound.
- * suspended: the AudioSession is not playing sound, but can resume when it will get unsuspended.
+ * interrupted: the AudioSession is not playing sound, but can resume when it will get uninterrupted.
  * inactive: the AudioSession is not playing sound.
 
 The page has a default audio session which is used by the user agent to automatically set up the audio session parameters.
@@ -52,7 +52,7 @@ This default audio session is represented as an `AudioSession` object that is ex
 enum AudioSessionState {
   "inactive",
   "active",
-  "suspended"
+  "interrupted"
 };
 
 enum AudioSessionType {
@@ -96,7 +96,7 @@ navigator.mediaDevices.getUserMedia({ audio:true, video:true }).then(stream => {
 });
 ```
 
-#### A site reacts upon suspension
+#### A site reacts upon interruption
 
 ```javascript
 navigator.audioSession.type = 'play-and-record';
@@ -110,19 +110,19 @@ navigator.mediaDevices.getUserMedia({ audio:true, video:true }).then(stream => {
     localVideo.srcObject = stream;
 });
 
-let isSuspended = false;
+let isInterrupted = false;
 navigator.audioSession.onstatechange = () => {
-    if (navigator.audioSession.state === 'suspended') {
-        isSuspended = true;
+    if (navigator.audioSession.state === 'interrupted') {
+        isInterrupted = true;
         localVideo.pause();
         remoteVideo.pause();
         // Make it clear to the user that the call is interrupted.
-        showSuspendedBanner();
+        showInterruptedBanner();
         localVideo.srcObject.getTracks().forEach(track => track.enabled = false);
         return;
     }
-    if (isSuspended) {
-        isSuspended = false;
+    if (isInterrupted) {
+        isInterrupted = false;
         // Let user decide when to restart the call.
         showOptionalRestartBanner().then((result) => {
             if (!result)
