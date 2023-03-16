@@ -36,9 +36,9 @@ By convention, there are several `audio session types` for different purposes:
 
 The {{AudioSession}} is the main interface for this API. It can have the following states:
 
- * active: the AudioSession is playing sound.
- * interrupted: the AudioSession is not playing sound, but can resume when it will get uninterrupted.
- * inactive: the AudioSession is not playing sound.
+ * {{AudioSessionState/active}}: the {{AudioSession}} is playing sound.
+ * {{AudioSessionState/interrupted}}: the {{AudioSession}} is not playing sound, but can resume when it will get uninterrupted.
+ * {{AudioSessionState/inactive}}: the {{AudioSession}} is not playing sound.
 
 The page has a default audio session which is used by the user agent to automatically set up the audio session parameters.
 The UA will request and abandon audio focus when media elements start/finish playing on the page.
