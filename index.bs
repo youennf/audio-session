@@ -4,7 +4,6 @@ Shortname: audio-session
 Level: None
 Status: w3c/ED
 Group: mediawg
-TR: https://www.w3.org/TR/audio-session/
 Repository: w3c/audio-session
 URL: https://w3c.github.io/audio-session/
 Editor: Youenn Fablet, Apple https://www.apple.com/, youenn@apple.com, w3cid 96458
