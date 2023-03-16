@@ -11,9 +11,6 @@ Editor: Alastor Wu, Mozilla https://www.mozilla.org, alwu@mozilla.com, w3cid 921
 Abstract: This API defines an API surface for manipulating the bits on
 Markup Shorthands: css no, markdown yes
 </pre>
-<pre class=link-defaults>
-spec:webidl; type:dfn; text:resolve
-</pre>
 
 # Introduction # {#introduction}
 
