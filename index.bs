@@ -42,7 +42,7 @@ The {{AudioSession}} is the main interface for this API. It can have the followi
 
 The page has a default audio session which is used by the user agent to automatically set up the audio session parameters.
 The UA will request and abandon audio focus when media elements start/finish playing on the page.
-This default audio session is represented as an `AudioSession` object that is exposed as `navigator.audioSession`.
+This default audio session is represented as an {{AudioSession}} object that is exposed as {{Navigator/audioSession|navigator.audioSession}}.
 
 <pre class="idl">
 enum AudioSessionState {
