@@ -34,7 +34,7 @@ By convention, there are several `audio session types` for different purposes:
  * Play and record ({{AudioSessionType/play-and-record}}) audio, which is used for recording audio. This is useful in cases microphone is being used or in video conferencing applications.
  * Auto ({{AudioSessionType/auto}}) lets the User Agent choose the best audio session type according the use of audio by the web page. This is the type of the default {{AudioSession}}.
 
-The AudioSession is the main interface for this API. It can have the following states:
+The {{AudioSession}} is the main interface for this API. It can have the following states:
 
  * active: the AudioSession is playing sound.
  * interrupted: the AudioSession is not playing sound, but can resume when it will get uninterrupted.
