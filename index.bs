@@ -140,4 +140,8 @@ navigator.audioSession.onstatechange = async () => {
 
 # Acknowledgements # {#acknowledgements}
 
-TODO
+The Working Group acknowledges the following people for their invaluable contributions to this specification:
+
+* Becca Hughes
+* Mounir Lamouri
+* Zhiqiang Zhang
