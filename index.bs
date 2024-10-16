@@ -134,6 +134,13 @@ This default audio session is represented as an {{AudioSession}} object that is 
 
 # Extensions to the `Navigator` interface # {#extensions-to-navigator}
 
+Each {{Window}} has an <dfn>associated AudioSession</dfn>, which is an {{AudioSession}} object.
+It represents the default audio session that is used by the user agent to automatically set up the audio session parameters.
+The user agent will request or abandon audio focus when audio session [=audio session/elements=] start or finish playing.
+Upon creation of the {{Window}} object, its [=associated AudioSession=] MUST be set to a newly created {{AudioSession}} object with the {{Window}} object's [=relevant realm=].
+
+The [=associated AudioSession=] list of [=audio session/elements=] is updated dynamically as audio sources and sinks of the {{Window}} object  are created or removed.
+
 <pre class="idl">
 [Exposed=Window]
 partial interface Navigator {
