@@ -12,23 +12,55 @@ Abstract: This API defines an API surface for controlling how audio is rendered 
 Markup Shorthands: css no, markdown yes
 </pre>
 
+<pre class=link-defaults>
+spec:html; type:dfn; for:/; text:browsing context
+</pre>
+
 # Introduction # {#introduction}
 
-People consume a lot of media (audio/video) and the Web is one of the primary means of consuming this type of content.
-However, media on the web does not integrate well with the platform.
-The Audio Session API helps to close the gap with platforms that have audio session/audio focus such as Android and iOS.
-This API will help by improving the audio-mixing of websites with native apps, so they can play on top of each other, or play exclusively.
+People increasingly consume media (audio/video) through the Web,
+which has become a primary channel for accessing this type of content.
+However, media on the Web often lacks seamless integration with underlying platforms.
+The Audio Session API addresses this gap by enhancing media handling
+across platforms that support audio session management or similar audio focus features.
+This API improves how web-based audio interacts with other apps,
+allowing for better audio mixing or exclusive playback, depending on the context,
+to provide a more consistent and integrated media experience across devices.
 
-Additionally, on some platforms the user agent will automatically manage the audio session for the site
-based on whether media elements are playing or not and which APIs are used for playing audio.
-In some cases this may not match user expectations, this API provides overrides to authors.
+Additionally, some platforms automatically manage a site's audio session
+based on media playback and the APIs used to play audio.
+However, this behavior might not always align with user expectations.
+This API allows developers to override the default behavior and gain more control over an audio session.
+
+# Concepts # {#concepts}
+
+An <dfn>audio session</dfn> represents the playback of audible media.
+An [=audio session=] can be of a particular [=audio session/type=], and be in a particular [=audio session/state=].
+An [=audio session=] manages the audio for a set of sources and sinks, named audio session <dfn data-lt="element" for="audio session">elements</dfn>.
+
+An audio session [=audio session/element=] has a number of properties:
+
+* A <dfn data-lt="default type" for="audio session">default type</dfn>, which is used to compute the [=audio session=] [=audio session/type=], in case of "{{AudioSessionType/auto}}".
+* An <dfn>audible flag</dfn>, which is either `true` if the element is playing/recording audio or `false` otherwise.
+
+An audio session [=audio session/element=] is an <dfn>audible element</dfn> if its [=audible flag=] is `true`.
+
+Additionaly, an audio session [=audio session/element=] has associated steps for dealing with various state changes. By default, each of these steps is empty list of steps:
+
+* <dfn data-lt="element update steps" for="audio session">Element update steps</dfn>, which are run whenever the audio session state changes.
+* <dfn data-lt="element suspend steps" for="audio session">Element suspend steps</dfn>, which are run when the audio session state moves from {{AudioSessionState/active}} to either {{AudioSessionState/interrupted}} or {{AudioSessionState/inactive}}.
+* <dfn data-lt="element resume steps" for="audio session">Element resume steps</dfn>, which are run when audio session state moves from {{AudioSessionState/interrupted}} to {{AudioSessionState/active}}.
+
+A [=top-level browsing context=] has a <dfn>selected audio session</dfn>. The [=selected audio session=] may be [=update the selected audio session|updated=] dynamically.
+A [=top-level browsing context=] is said to have <dfn lt="audio focus" for="audio session">audio focus</dfn> if its [=selected audio session=] is not `null` and its state is {{AudioSessionState/active}}.
+
+<div class=note>
+User agents can decide whether to allow several [=top-level browsing context=] to have [=audio focus=], or to enforce that only a single [=top-level browsing context=] has [=audio focus=] at any given time.</div>
 
 # The {{AudioSession}} interface # {#audiosession-interface}
 
-An <dfn>audio session</dfn> represents the playback of auditory media.
-An audio session can be of particular [=audio session/type=] and in a given [=audio session/state=].
-
-The {{AudioSession}} is the main interface for this API, which is accessed through the {{Navigator}} interface (see [[#extensions-to-navigator]]).
+{{AudioSession}} is the main interface for this API.
+It is accessed through the {{Navigator}} interface (see [[#extensions-to-navigator]]).
 
 <pre class="idl">
   [Exposed=Window]
