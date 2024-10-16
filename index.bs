@@ -93,7 +93,7 @@ In the API, these are represented by the {{AudioSessionType}} enum:
   <dt><dfn for="AudioSessionType" enum-value>play-and-record</dfn></dt>
   <dd>Play and record audio, which is used for recording audio. This is useful in cases microphone is being used or in video conferencing applications.</dd>
   <dt><dfn for="AudioSessionType" enum-value>auto</dfn></dt>
-  <dd>Auto lets the User Agent choose the best audio session type according the use of audio by the web page. This is the type of the default {{AudioSession}}.</dd>
+  <dd>Auto lets the user agent choose the best audio session type according the use of audio by the web page. This is the default type of {{AudioSession}}.</dd>
 </dl>
 
 <pre class="idl">
@@ -107,22 +107,20 @@ In the API, these are represented by the {{AudioSessionType}} enum:
   };
 </pre>
 
+An {{AudioSessionType}} is an <dfn>exclusive type</dfn> if it is {{AudioSessionType/playback}} or {{AudioSessionType/play-and-record}}.
+
 ## Audio session states ## {#audio-session-states}
 
-An [=audio session=] can be in one of following <dfn data-lt="state" for="audio session">state</dfn> , which are represented in the API by the {{AudioSessionState}} enum:
+An [=audio session=] can be in one of the following <dfn data-lt="state" for="audio session">state</dfn> , which are represented in the API by the {{AudioSessionState}} enum:
 
 <dl>
   <dt><dfn for="AudioSessionState" enum-value>active</dfn></dt>
-  <dd>the [=audio session=] is playing sound.</dd>
+  <dd>the [=audio session=] is playing sound/recording microphone.</dd>
   <dt><dfn for="AudioSessionState" enum-value>interrupted</dfn></dt>
-  <dd>the [=audio session=] is not playing sound, but can resume when it will get uninterrupted.</dd>
+  <dd>the [=audio session=] is not playing sound nor recording microphone, but can resume when it will get uninterrupted.</dd>
   <dt><dfn for="AudioSessionState" enum-value>inactive</dfn></dt>
-  <dd>the [=audio session=] is not playing sound.</dd>
+  <dd>the [=audio session=] is not playing sound nor recording microphone.</dd>
 </dl>
-
-The page has a default audio session which is used by the user agent to automatically set up the audio session parameters.
-The UA will request and abandon audio focus when media elements start/finish playing on the page.
-This default audio session is represented as an {{AudioSession}} object that is exposed as {{Navigator/audioSession|navigator.audioSession}}.
 
 <pre class="idl">
   enum AudioSessionState {
@@ -131,6 +129,8 @@ This default audio session is represented as an {{AudioSession}} object that is 
     "interrupted"
   };
 </pre>
+
+The [=audio session=]'s state may change, which will automatically [=update the state=] of its {{AudioSession}} object.
 
 # Extensions to the `Navigator` interface # {#extensions-to-navigator}
 
