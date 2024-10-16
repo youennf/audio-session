@@ -76,7 +76,33 @@ It is accessed through the {{Navigator}} interface (see [[#extensions-to-navigat
   };
 </pre>
 
-## Audio session states ## {#audio-session-types}
+To create an {{AudioSession}} object in |realm|, run the following steps:
+
+1. Let |audioSession| be a new {{AudioSession}} object in |realm|, initalized with the following internal slots:
+    1. <dfn for="AudioSession">\[[type]]</dfn> to store the audio session [=audio session/type=], initialized to {{AudioSessionType/auto}}.
+    1. <dfn for="AudioSession">\[[state]]</dfn> to store the audio session [=audio session/state=], initialized to {{AudioSessionState/inactive}}.
+    1. <dfn for="AudioSession">\[[elements]]</dfn> to store the audio session [=audio session/elements=], initialized to an empty list.
+    1. <dfn for="AudioSession">\[[interruptedElements]]</dfn> to store the audio session [=audio session/elements=] that where interrupted while being [=audible element|audible=], initialized to an empty list.
+    1. <dfn for="AudioSession">\[[appliedType]]</dfn> to store the [=audio session/type=] applied to the audio session, initialized to {{AudioSessionType/auto}}.
+    1. <dfn for="AudioSession">\[[isTypeBeingApplied]]</dfn> flag to store whether the [=audio session/type=] is being applied to the audio session, initialized to `false`.
+1. Return |audioSession|.
+
+Each {{AudioSession}} object is uniquely <dfn for="AudioSession">tied to</dfn> its underlying [=audio session=].
+
+The {{AudioSession}} state attribute reflects its [=audio session=] [=audio session/state=].
+On getting, it MUST return the {{AudioSession}} [=AudioSession/[[state]]=] value.
+
+The {{AudioSession}} type attribute reflects its [=audio session=] [=audio session/type=], except for {{AudioSessionType/auto}}.
+
+On getting, it MUST return the {{AudioSession}} [=AudioSession/[[type]]=] value.
+
+On setting, it MUST run the following steps with |newValue| being the new value being set on |audioSession|:
+
+1. If |audioSession|.[=AudioSession/[[type]]=] is equal to |newValue|, abort these steps.
+1. Set |audioSession|.[=AudioSession/[[type]]=] to |newValue|.
+1. [=Update the type=] of |audioSession|.
+
+## Audio session types ## {#audio-session-types}
 
 By convention, there are several different [=audio session=] <dfn data-lt="type" for="audio session">types</dfn> for different purposes.
 In the API, these are represented by the {{AudioSessionType}} enum:
