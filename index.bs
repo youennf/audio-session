@@ -41,7 +41,7 @@ An [=audio session=] manages the audio for a set of sources and sinks, named aud
 An [=audio session=]'s [=audio session/element=] has a number of properties:
 
 * A <dfn data-lt="default type" for="audio session">default type</dfn>, which is used to compute the [=audio session=] [=audio session/type=], in case of "{{AudioSessionType/auto}}".
-* An <dfn>audible flag</dfn>, which is either `true` if the element is playing/recording audio or `false` otherwise.
+* An <dfn>audible flag</dfn>, which is either `true` if the element is playing/recording audio, or `false` otherwise.
 
 An audio session [=audio session/element=] is an <dfn>audible element</dfn> if its [=audible flag=] is `true`.
 
