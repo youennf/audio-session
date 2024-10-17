@@ -34,9 +34,13 @@ This API allows developers to override the default behavior and gain more contro
 
 # Concepts # {#concepts}
 
-An <dfn>audio session</dfn> represents the playback of audible media.
+A web page can do audio processing in various ways, combining different APIs like {{HTMLMediaElement}} or {{AudioContext}}.
+This audio processing has a start and a stop, which aggregates all the different audio APIs being used.
+An <dfn>audio session</dfn> represents this aggregated audio processing. It allows web pages to express the general nature
+of the audio processing done by the web page.
+
 An [=audio session=] can be of a particular [=audio session/type=], and be in a particular [=audio session/state=].
-An [=audio session=] manages the audio for a set of sources and sinks, named audio session <dfn data-lt="element" for="audio session">elements</dfn>.
+An [=audio session=] manages the audio for a set of individual sources (microphone recording) and sinks (audio rendering), named audio session <dfn data-lt="element" for="audio session">elements</dfn>.
 
 An [=audio session=]'s [=audio session/element=] has a number of properties:
 
