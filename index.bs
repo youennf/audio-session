@@ -52,7 +52,7 @@ Additionaly, an audio session [=audio session/element=] has associated steps for
 * <dfn data-lt="element resume steps" for="audio session">Element resume steps</dfn>, which are run when audio session state moves from {{AudioSessionState/interrupted}} to {{AudioSessionState/active}}.
 
 A [=top-level browsing context=] has a <dfn>selected audio session</dfn>. The [=selected audio session=] may be [=update the selected audio session|updated=] dynamically.
-A [=top-level browsing context=] is said to have <dfn lt="audio focus" for="audio session">audio focus</dfn> if its [=selected audio session=] is not `null` and its state is {{AudioSessionState/active}}.
+A [=top-level browsing context=] is said to have <dfn lt="audio focus" for="top-level browsing context">audio focus</dfn> if its [=selected audio session=] is not `null` and its state is {{AudioSessionState/active}}.
 
 <div class=note>
 User agents can decide whether to allow several [=top-level browsing context=] to have [=audio focus=], or to enforce that only a single [=top-level browsing context=] has [=audio focus=] at any given time.</div>
