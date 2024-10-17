@@ -38,7 +38,7 @@ An <dfn>audio session</dfn> represents the playback of audible media.
 An [=audio session=] can be of a particular [=audio session/type=], and be in a particular [=audio session/state=].
 An [=audio session=] manages the audio for a set of sources and sinks, named audio session <dfn data-lt="element" for="audio session">elements</dfn>.
 
-An audio session [=audio session/element=] has a number of properties:
+An [=audio session=]'s [=audio session/element=] has a number of properties:
 
 * A <dfn data-lt="default type" for="audio session">default type</dfn>, which is used to compute the [=audio session=] [=audio session/type=], in case of "{{AudioSessionType/auto}}".
 * An <dfn>audible flag</dfn>, which is either `true` if the element is playing/recording audio or `false` otherwise.
