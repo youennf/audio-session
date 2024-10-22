@@ -115,7 +115,7 @@ An [=audio session=] can be in one of the following <dfn data-lt="state" for="au
 
 <dl>
   <dt><dfn for="AudioSessionState" enum-value>active</dfn></dt>
-  <dd>the [=audio session=] is playing sound/recording microphone.</dd>
+  <dd>the [=audio session=] is playing sound or recording microphone.</dd>
   <dt><dfn for="AudioSessionState" enum-value>interrupted</dfn></dt>
   <dd>the [=audio session=] is not playing sound nor recording microphone, but can resume when it will get uninterrupted.</dd>
   <dt><dfn for="AudioSessionState" enum-value>inactive</dfn></dt>
