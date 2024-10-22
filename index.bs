@@ -78,7 +78,7 @@ It is accessed through the {{Navigator}} interface (see [[#extensions-to-navigat
 
 To create an {{AudioSession}} object in |realm|, run the following steps:
 
-1. Let |audioSession| be a new {{AudioSession}} object in |realm|, initalized with the following internal slots:
+1. Let |audioSession| be a new {{AudioSession}} object in |realm|, initialized with the following internal slots:
     1. <dfn for="AudioSession">\[[type]]</dfn> to store the audio session [=audio session/type=], initialized to {{AudioSessionType/auto}}.
     1. <dfn for="AudioSession">\[[state]]</dfn> to store the audio session [=audio session/state=], initialized to {{AudioSessionState/inactive}}.
     1. <dfn for="AudioSession">\[[elements]]</dfn> to store the audio session [=audio session/elements=], initialized to an empty list.
